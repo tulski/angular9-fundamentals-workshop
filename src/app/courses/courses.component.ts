@@ -1,4 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+
+interface Course {
+  id: number;
+  title: string;
+  description: string;
+  percentComplete: number;
+  favorite: boolean;
+}
 
 @Component({
   selector: 'app-courses',
@@ -6,12 +14,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./courses.component.scss']
 })
 export class CoursesComponent implements OnInit {
-  // CHALLENGE
-  // STEP 01: Display courses using ngFor
-  // STEP 02: Add event handler to select course
-  // STEP 03: Display raw json of selected course
 
-  courses = [
+
+  selectedCourse: Course = null;
+
+  courses: Course[] = [
     {
       id: 1,
       title: 'Angular 9 Fundamentals',
@@ -28,9 +35,38 @@ export class CoursesComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
+    this.resetSelectedCourse();
+  }
+
+  resetSelectedCourse() {
+    this.selectedCourse = {
+      id: null,
+      title: '',
+      description: '',
+      percentComplete: 0,
+      favorite: false
+    };
+
+  }
+
+  saveCourse(course: Course) {
+    this.courses = [...this.courses, course];
+  }
+
+  deleteCourse(courseId) {
+    this.courses = this.courses.filter(({id}) => id !== courseId);
+  }
+
+  selectCourse(course) {
+    this.selectedCourse = course;
+  }
+
+  cancel() {
+    this.resetSelectedCourse();
   }
 
 }
