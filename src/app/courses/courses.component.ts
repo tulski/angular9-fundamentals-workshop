@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CoursesService } from '../shared/services/courses.service';
+import {Component, OnInit} from '@angular/core';
+import {CoursesService} from '../shared/services/courses.service';
 
 @Component({
   selector: 'app-courses',
@@ -10,13 +10,13 @@ export class CoursesComponent implements OnInit {
   // CHALLENGE
   // STEP 01: Complete remote update call
   // STEP 02: Complete remote delete call
-  // STEP 03: Fix UI on completed operation
 
   selectedCourse = null;
 
   courses = null;
 
-  constructor(private coursesService: CoursesService) { }
+  constructor(private coursesService: CoursesService) {
+  }
 
   ngOnInit(): void {
     this.resetSelectedCourse();
@@ -24,15 +24,13 @@ export class CoursesComponent implements OnInit {
   }
 
   resetSelectedCourse() {
-    const emptyCourse = {
+    this.selectedCourse = {
       id: null,
       title: '',
       description: '',
       percentComplete: 0,
       favorite: false
     };
-
-    this.selectedCourse = emptyCourse;
   }
 
   selectCourse(course) {
@@ -45,16 +43,19 @@ export class CoursesComponent implements OnInit {
   }
 
   saveCourse(course) {
-    if(course.id) {
-      this.coursesService.update(course);
+    if (course.id) {
+      this.coursesService.update(course)
+        .subscribe(result => this.loadCourses());
     } else {
       this.coursesService.create(course)
         .subscribe(result => this.loadCourses());
     }
+    this.cancel();
   }
 
   deleteCourse(courseId) {
-    this.coursesService.delete(courseId);
+    this.coursesService.delete(courseId)
+      .subscribe(result => this.loadCourses());
   }
 
   cancel() {
